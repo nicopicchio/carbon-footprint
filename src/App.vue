@@ -14,6 +14,14 @@
     <button v-if="!findOutBtn" @click="handleCheckURLBtn" class="check-btn">
       Check
     </button>
+    <div id="report-card">
+      <h1>Your carbon footprint report</h1>
+      <h2>{{ response.url }}</h2>
+      <p>bytes {{ response.bytes }}</p>
+      <p>Your website is cleaner than</p>
+      <h2>{{ response.cleanerThan }}%</h2>
+      <p>of tested resources</p>
+    </div>
   </div>
 </template>
 
@@ -24,7 +32,11 @@ export default {
   data() {
     return {
       findOutBtn: true,
-      response: {},
+      response: {
+        url: "",
+        bytes: "",
+        cleanerThan: "",
+      },
     };
   },
   methods: {
@@ -33,10 +45,12 @@ export default {
     },
     handleCheckURLBtn() {
       axios
-        .get(
-          "http://localhost:8080/site?url=http%3A%2F%2Fwww.apple.com"
-        )
-        .then((response) => console.log(response.data))
+        .get("http://localhost:8080/site?url=http%3A%2F%2Fwww.nationalgeographic.com")
+        .then((response) => {
+          (this.response.url = response.data.url),
+            (this.response.bytes = response.data.bytes),
+            (this.response.cleanerThan = (response.data.cleanerThan * 100).toFixed(0));
+        })
         .catch((error) => console.log(error));
     },
   },
@@ -69,6 +83,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+#report-card {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 10px;
 }
 
 h1,

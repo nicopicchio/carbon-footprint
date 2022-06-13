@@ -4,17 +4,27 @@
     <h1>Website carbon footprint checker</h1>
     <p>How much is your website impacting the planet?</p>
     <button v-if="findOutBtn" @click="handleFindOutBtn">Let's find out!</button>
-    <input v-if="!findOutBtn" class="input-url" type="text" placeholder="Enter URL here..." required>
-    <button v-if="!findOutBtn" @click="handleCheckURLBtn" class="check-btn">Check</button>
+    <input
+      v-if="!findOutBtn"
+      class="input-url"
+      type="text"
+      placeholder="Enter URL here..."
+      required
+    />
+    <button v-if="!findOutBtn" @click="handleCheckURLBtn" class="check-btn">
+      Check
+    </button>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "App",
   data() {
     return {
       findOutBtn: true,
+      response: {},
     };
   },
   methods: {
@@ -22,8 +32,13 @@ export default {
       this.findOutBtn = false;
     },
     handleCheckURLBtn() {
-      console.log('sending http request')
-    }
+      axios
+        .get(
+          "http://localhost:8080/site?url=http%3A%2F%2Fwww.apple.com"
+        )
+        .then((response) => console.log(response.data))
+        .catch((error) => console.log(error));
+    },
   },
 };
 </script>

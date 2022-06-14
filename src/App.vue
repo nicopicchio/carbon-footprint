@@ -1,37 +1,54 @@
 <template>
   <div id="app">
-    <img class="main-logo" src="./assets/logo.png" alt="logo" />
-    <h1>Website carbon footprint checker</h1>
-    <p>How much is your website impacting the planet?</p>
-    <button v-if="findOutBtn" @click="handleFindOutBtn">Let's find out!</button>
-    <input
-      v-if="!findOutBtn"
-      class="input-url"
-      type="text"
-      placeholder="Enter URL here..."
-      required
-    />
-    <button v-if="!findOutBtn" @click="handleCheckURLBtn" class="check-btn">
-      Check
-    </button>
-    <div v-if="!findOutBtn" id="report-card">
-      <h1>Your carbon footprint report</h1>
-      <h2>{{ response.url }}</h2>
-      <p>bytes {{ response.bytes }}</p>
-      <p>Your website is cleaner than</p>
-      <h2>{{ response.cleanerThan }}%</h2>
-      <p>of tested resources</p>
+    <div id="main-container">
+      <img class="main-logo" src="./assets/logo.png" alt="logo" />
+      <h1>Website carbon footprint checker</h1>
+      <p class="subtitle">How much is your website impacting the planet?</p>
+      <button v-if="findOutBtn" @click="handleFindOutBtn">
+        Let's find out!
+      </button>
+      <input
+        v-if="checkBtn && !findOutBtn"
+        @input="handleUrlInput"
+        class="input-url"
+        type="text"
+        placeholder="Enter domain here..."
+        required
+      />
+      <button
+        v-if="checkBtn && !findOutBtn"
+        @click="handleCheckURLBtn"
+        class="check-btn"
+      >
+        Check
+      </button>
+      <div v-if="!checkBtn" id="report-card">
+        <h1>Your carbon footprint report</h1>
+        <h2 id="response-url">{{ response.url }}</h2>
+        <p id="bytes">Data: {{ response.bytes }} Mb</p>
+        <p>Your website is cleaner than</p>
+        <h2 id="response-percentage">{{ response.cleanerThan }}%</h2>
+        <p>of tested resources</p>
+      </div>
     </div>
+    <footer>
+      <p id="footer-text">
+        Made by <a href="http://nicotech.dev">Nico</a> for the ❤️ of the 🌍
+      </p>
+    </footer>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+const bytesToMb = Math.pow(10, 6);
+let userUrl = "";
 export default {
   name: "App",
   data() {
     return {
       findOutBtn: true,
+      checkBtn: true,
       response: {
         url: "",
         bytes: "",
@@ -43,13 +60,22 @@ export default {
     handleFindOutBtn() {
       this.findOutBtn = false;
     },
-    handleCheckURLBtn() {
+    handleUrlInput(e) {
+      userUrl = e.target.value;
+    },
+    handleCheckURLBtn(e) {
+      e.preventDefault();
+      this.checkBtn = false;
       axios
-        .get("http://localhost:8080/site?url=http%3A%2F%2Fwww.nationalgeographic.com")
+        .get(`http://localhost:8080/site?url=http%3A%2F%2F${userUrl}`)
         .then((response) => {
           (this.response.url = response.data.url),
-            (this.response.bytes = response.data.bytes),
-            (this.response.cleanerThan = (response.data.cleanerThan * 100).toFixed(0));
+            (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(
+              2
+            )),
+            (this.response.cleanerThan = (
+              response.data.cleanerThan * 100
+            ).toFixed(0));
         })
         .catch((error) => console.log(error));
     },
@@ -77,22 +103,18 @@ body {
   justify-content: center;
 }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+p {
+  margin: 2rem 0;
+  font-size: 1.5rem;
 }
 
-#report-card {
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 10px;
+a {
+  text-decoration: none;
+  color: #467920;
 }
 
 h1,
-p {
+.subtitle {
   margin-bottom: 2rem;
 }
 
@@ -104,11 +126,44 @@ button {
   color: white;
   font-size: 1rem;
   font-weight: bold;
+  transition: 0.5s;
 }
 
 button:hover {
   background-color: white;
   color: #2f5e32;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+}
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+#footer-text {
+  font-size: 1rem;
+}
+
+#report-card {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+#bytes {
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+
+#response-percentage {
+  font-size: 5rem;
 }
 
 .main-logo {

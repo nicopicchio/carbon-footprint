@@ -14,7 +14,7 @@
     <button v-if="!findOutBtn" @click="handleCheckURLBtn" class="check-btn">
       Check
     </button>
-    <div id="report-card">
+    <div v-if="!findOutBtn" id="report-card">
       <h1>Your carbon footprint report</h1>
       <h2>{{ response.url }}</h2>
       <p>bytes {{ response.bytes }}</p>

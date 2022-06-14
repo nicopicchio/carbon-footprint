@@ -1,19 +1,4 @@
-# carbon-footprint-project
+# Website carbon footprint checker
+## Find out how much your website impacts the planet!
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![screenshot](src/assets/carbon-fooprint-screenshot.png)

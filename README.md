@@ -1,4 +1,4 @@
-# carbon-footprint-project
+# carbon-footprint
 
 ## Project setup
 ```

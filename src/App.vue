@@ -25,13 +25,23 @@
       <div v-if="!checkBtn && showReport" id="report-card">
         <h1>Carbon Footprint Report</h1>
         <h2 id="response-url">Website: {{ response.url }}</h2>
-        <p id="bytes">Data: {{ response.bytes }} Mb</p>
+        <p id="bytes">Data on page load: {{ response.bytes }} Mb</p>
         <p>Your website is cleaner than</p>
         <h2 id="response-percentage">{{ response.cleanerThan }}%</h2>
         <p>of tested resources</p>
       </div>
-      <p id="more-details" v-if="!checkBtn && !findOutBtn">
-        Click for CO2 stats
+      <div v-if="!showReport && showCO2Report" id="report-card">
+        <h1>CO2 Report</h1>
+        <h2 class="co2-report-text">CO2 from grid</h2>
+        <h2 class="co2-report-text grid">{{ response.co2.grid }}g</h2>
+        <h2 class="co2-report-text">CO2 from renewable sources</h2>
+        <h2 class="co2-report-text renewable">{{ response.co2.renewable }}g</h2>
+      </div>
+      <p id="more-details" v-if="!showCO2Report && showReport" @click="showStats">
+        Click for CO2 data
+      </p>
+      <p id="more-details" v-if="showCO2Report && !showReport" @click="showStats">
+        Click for Carbon Footprint Report
       </p>
     </div>
     <footer>
@@ -54,10 +64,15 @@ export default {
       findOutBtn: true,
       checkBtn: true,
       showReport: false,
+      showCO2Report: false,
       response: {
         url: "",
         bytes: "",
         cleanerThan: "",
+        co2: {
+          grid: "",
+          renewable: "",
+        },
       },
     };
   },
@@ -75,7 +90,6 @@ export default {
       axios
         .get(`http://localhost:8080/site?url=http%3A%2F%2F${userUrl}`)
         .then((response) => {
-          console.log(response.data);
           (this.response.url = response.data.url),
             (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(
               2
@@ -83,12 +97,17 @@ export default {
             (this.response.cleanerThan = (
               response.data.cleanerThan * 100
             ).toFixed(0));
+          (this.response.co2.grid =
+            response.data.statistics.co2.grid.grams.toFixed(2)),
+            (this.response.co2.renewable =
+              response.data.statistics.co2.renewable.grams.toFixed(2));
         })
         .catch((error) => console.log(error));
     },
-    showCO2Stats() {
-      
-    }
+    showStats() {
+      this.showReport = !this.showReport;
+      this.showCO2Report = !this.showCO2Report;
+    },
   },
 };
 </script>
@@ -189,6 +208,18 @@ footer {
   margin: auto;
   padding: 0.5rem;
   width: 300px;
+}
+
+.co2-report-text {
+  margin: 1rem 0;
+}
+
+.grid {
+  color: rgb(236, 50, 50);
+}
+
+.renewable {
+  color: #467920;
 }
 
 .check-btn {

@@ -12,7 +12,7 @@
         @input="handleUrlInput"
         class="input-url"
         type="text"
-        placeholder="Enter domain here..."
+        placeholder="Enter domain"
         required
       />
       <button
@@ -22,18 +22,22 @@
       >
         Check
       </button>
-      <div v-if="!checkBtn" id="report-card">
-        <h1>Your carbon footprint report</h1>
-        <h2 id="response-url">{{ response.url }}</h2>
+      <div v-if="!checkBtn && showReport" id="report-card">
+        <h1>Carbon Footprint Report</h1>
+        <h2 id="response-url">Website: {{ response.url }}</h2>
         <p id="bytes">Data: {{ response.bytes }} Mb</p>
         <p>Your website is cleaner than</p>
         <h2 id="response-percentage">{{ response.cleanerThan }}%</h2>
         <p>of tested resources</p>
       </div>
+      <p id="more-details" v-if="!checkBtn && !findOutBtn">
+        Click for CO2 stats
+      </p>
     </div>
     <footer>
       <p id="footer-text">
-        Made by <a href="http://nicotech.dev">Nico</a> for the ❤️ of the 🌍
+        Made by <a href="https://nicotech.dev" target="blank">Nico</a> for the
+        ❤️ of the 🌍
       </p>
     </footer>
   </div>
@@ -49,6 +53,7 @@ export default {
     return {
       findOutBtn: true,
       checkBtn: true,
+      showReport: false,
       response: {
         url: "",
         bytes: "",
@@ -66,9 +71,11 @@ export default {
     handleCheckURLBtn(e) {
       e.preventDefault();
       this.checkBtn = false;
+      this.showReport = true;
       axios
         .get(`http://localhost:8080/site?url=http%3A%2F%2F${userUrl}`)
         .then((response) => {
+          console.log(response.data);
           (this.response.url = response.data.url),
             (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(
               2
@@ -79,6 +86,9 @@ export default {
         })
         .catch((error) => console.log(error));
     },
+    showCO2Stats() {
+      
+    }
   },
 };
 </script>
@@ -104,7 +114,7 @@ body {
 }
 
 p {
-  margin: 2rem 0;
+  margin: 1rem 0;
   font-size: 1.5rem;
 }
 
@@ -164,6 +174,10 @@ footer {
 
 #response-percentage {
   font-size: 5rem;
+}
+
+#more-details {
+  font-size: 1rem;
 }
 
 .main-logo {

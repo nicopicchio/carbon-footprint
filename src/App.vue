@@ -88,7 +88,7 @@ export default {
       this.checkBtn = false;
       this.showReport = true;
       axios
-        .get(`http://localhost:8080/site?url=http%3A%2F%2F${userUrl}`)
+        .get(`https://carbonfootprintchecker.netlify.app/site?url=http%3A%2F%2F${userUrl}`)
         .then((response) => {
           (this.response.url = response.data.url),
             (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(

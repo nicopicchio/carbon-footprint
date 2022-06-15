@@ -57,7 +57,6 @@
 import axios from "axios";
 const bytesToMb = Math.pow(10, 6);
 let userUrl = "";
-const proxy = process.env.PROXY_URL;
 export default {
   name: "App",
   data() {
@@ -89,7 +88,7 @@ export default {
       this.checkBtn = false;
       this.showReport = true;
       axios
-        .get(`${proxy}${userUrl}`)
+        .get(`http://localhost:3001/${userUrl}`)
         .then((response) => {
           (this.response.url = response.data.url),
             (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(

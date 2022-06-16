@@ -46,8 +46,7 @@
     </div>
     <footer>
       <p id="footer-text">
-        Made by <a href="https://nicotech.dev" target="blank">Nico</a> for the
-        ❤️ of the 🌍
+        Made by <a href="https://nicotech.dev" target="blank">Nico</a> for the ❤️ of the 🌍
       </p>
     </footer>
   </div>
@@ -91,16 +90,10 @@ export default {
         .get(`http://localhost:3001/${userUrl}`)
         .then((response) => {
           (this.response.url = response.data.url),
-            (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(
-              2
-            )),
-            (this.response.cleanerThan = (
-              response.data.cleanerThan * 100
-            ).toFixed(0));
-          (this.response.co2.grid =
-            response.data.statistics.co2.grid.grams.toFixed(2)),
-            (this.response.co2.renewable =
-              response.data.statistics.co2.renewable.grams.toFixed(2));
+          (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(2)),
+          (this.response.cleanerThan = (response.data.cleanerThan * 100).toFixed(0));
+          (this.response.co2.grid = response.data.statistics.co2.grid.grams.toFixed(2)),
+          (this.response.co2.renewable = response.data.statistics.co2.renewable.grams.toFixed(2));
         })
         .catch((error) => console.log(error));
     },

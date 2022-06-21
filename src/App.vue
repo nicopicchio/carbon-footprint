@@ -190,6 +190,11 @@ footer {
 
 #more-details {
   font-size: 1rem;
+  display: inline-block;
+}
+
+#more-details:hover {
+  cursor: pointer;
 }
 
 .main-logo {

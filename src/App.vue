@@ -171,6 +171,8 @@ footer {
 
 #footer-text {
   font-size: 1rem;
+  position: fixed;
+  bottom: 0;
 }
 
 #report-card {
@@ -189,12 +191,15 @@ footer {
 }
 
 #more-details {
-  font-size: 1rem;
   display: inline-block;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: bold;
 }
 
 #more-details:hover {
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .main-logo {

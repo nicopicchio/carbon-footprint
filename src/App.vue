@@ -87,7 +87,7 @@ export default {
       this.checkBtn = false;
       this.showReport = true;
       axios
-        .get(`http://localhost:3001/${userUrl}`)
+        .get(`http://localhost:5000/${userUrl}`)
         .then((response) => {
           (this.response.url = response.data.url),
           (this.response.bytes = (response.data.bytes / bytesToMb).toFixed(2)),

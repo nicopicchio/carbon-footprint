@@ -2,7 +2,7 @@
   <div id="app">
     <div id="main-container">
       <img class="main-logo" src="./assets/logo.png" alt="logo" />
-      <h1>Website carbon footprint checker</h1>
+      <h1>Carbon footprint checker</h1>
       <p class="subtitle">How much is your website impacting the planet?</p>
       <button v-if="findOutBtn" @click="handleFindOutBtn">
         Let's find out!
